@@ -10,9 +10,6 @@ from nio.metadata.properties.expression import ExpressionProperty
 from nio.metadata.properties.holder import PropertyHolder
 
 
-OPS = [operator.or_, operator.and_]
-
-
 class BooleanOperator(Enum):
     ANY = 0
     ALL = 1
@@ -20,8 +17,6 @@ class BooleanOperator(Enum):
 
 class Condition(PropertyHolder):
     expr = ExpressionProperty(title='Condition')
-
-
 
 
 @Discoverable(DiscoverableType.block)
@@ -49,10 +44,12 @@ class Filter(Block):
         self._expressions = tuple(c.expr for c in self.conditions)
 
     def process_signals(self, signals):
+        self._logger.debug("Ready to process {} signals".format(len(signals)))
         result = signals
         if self.conditions:
             result = self._filter_signals(signals)
 
+        self._logger.debug("Emitting {} signals".format(len(result)))
         if len(result):
             self.notify_signals(result)
 
@@ -62,13 +59,34 @@ class Filter(Block):
         """
         # bring them into local variables for speed
         eval_expr = self._eval_expr
+        result = []
 
         if self.operator is BooleanOperator.ANY:
+            self._logger.debug("Filtering on an ANY condition")
             # let signal in if --           we find one True in the output
-            result = [s for s in signals if next((True for n in map(eval_expr, self._expressions, repeat(s)) if n), False)]
+            for sig in signals:
+                tmp = False
+                for expr in self._expressions:
+                    val = self._eval_expr(expr, sig)
+                    if val:
+                        self._logger.debug("Short circuiting ANY on Truthy condition")
+                        tmp = True
+                        break
+                if tmp:
+                    result.append(sig)
         else:
+            self._logger.debug("Filtering on an ALL condition")
             # Don't let signal in if --     there is a single False in the output
-            result = [s for s in signals if next((False for n in map(eval_expr, self._expressions, repeat(s)) if not n), True)]
+            for sig in signals:
+                tmp = True
+                for expr in self._expressions:
+                    val = self._eval_expr(expr, sig)
+                    if not val:
+                        self._logger.debug("Short circuiting ALL on Falsy condition")
+                        tmp = False
+                        break
+                if tmp:
+                    result.append(sig)
 
         return result
 
