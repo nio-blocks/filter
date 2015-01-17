@@ -36,7 +36,7 @@ class Filter(Block):
     conditions = ListProperty(Condition, title='Filter Conditions')
     operator = SelectProperty(
         BooleanOperator,
-        default=BooleanOperator.ANY,
+        default=BooleanOperator.ALL,
         title='Condition Operator')
 
     def configure(self, context):
