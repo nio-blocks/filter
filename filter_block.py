@@ -3,6 +3,7 @@ from itertools import repeat
 from enum import Enum
 import operator
 from nio.common.block.base import Block
+from nio.common.block.attribute import Output
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.list import ListProperty
 from nio.metadata.properties.select import SelectProperty
@@ -20,6 +21,7 @@ class Condition(PropertyHolder):
 
 
 @Discoverable(DiscoverableType.block)
+@Output('false')
 class Filter(Block):
 
     """ A block for filtering signal objects based on a list of
@@ -45,13 +47,20 @@ class Filter(Block):
 
     def process_signals(self, signals):
         self._logger.debug("Ready to process {} signals".format(len(signals)))
-        result = signals
+        true_result = signals
+        false_result = []
         if self.conditions:
-            result = self._filter_signals(signals)
+            true_result, false_result = self._filter_signals(signals)
 
-        self._logger.debug("Emitting {} signals".format(len(result)))
-        if len(result):
-            self.notify_signals(result)
+        self._logger.debug("Emitting {} true signals".format(
+            len(true_result)))
+        if len(true_result):
+            self.notify_signals(true_result, 'default')
+
+        self._logger.debug("Emitting {} false signals".format(
+            len(false_result)))
+        if len(false_result):
+            self.notify_signals(false_result, 'false')
 
     def _filter_signals(self, signals):
         """ Helper function to implement the any/all filtering
@@ -59,7 +68,8 @@ class Filter(Block):
         """
         # bring them into local variables for speed
         eval_expr = self._eval_expr
-        result = []
+        true_result = []
+        false_result = []
 
         if self.operator is BooleanOperator.ANY:
             self._logger.debug("Filtering on an ANY condition")
@@ -73,7 +83,9 @@ class Filter(Block):
                         tmp = True
                         break
                 if tmp:
-                    result.append(sig)
+                    true_result.append(sig)
+                else:
+                    false_result.append(sig)
         else:
             self._logger.debug("Filtering on an ALL condition")
             # Don't let signal in if --     there is a single False in the output
@@ -86,9 +98,11 @@ class Filter(Block):
                         tmp = False
                         break
                 if tmp:
-                    result.append(sig)
+                    true_result.append(sig)
+                else:
+                    false_result.append(sig)
 
-        return result
+        return (true_result, false_result)
 
     def _eval_expr(self, expr, signal):
         try:
