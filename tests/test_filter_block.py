@@ -12,7 +12,7 @@ class DummySignal(Signal):
 
 class TestFilter(NIOBlockTestCase):
 
-    def test_pass(self):
+    def test_pass_all(self):
         signals = [1, 2, 3, 4]
         blk = Filter()
         self.configure_block(blk, {})
@@ -20,6 +20,16 @@ class TestFilter(NIOBlockTestCase):
         blk.process_signals(signals)
         self.assert_num_signals_notified(4, blk)
         self.assert_num_signals_notified(0, blk, 'false')
+        blk.stop()
+
+    def test_pass_any(self):
+        signals = [1, 2, 3, 4]
+        blk = Filter()
+        self.configure_block(blk, {'operator': 'ANY'})
+        blk.start()
+        blk.process_signals(signals)
+        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(4, blk, 'false')
         blk.stop()
 
     def test_filter_odd(self):

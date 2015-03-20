@@ -49,10 +49,7 @@ class Filter(Block):
 
     def process_signals(self, signals):
         self._logger.debug("Ready to process {} signals".format(len(signals)))
-        true_result = signals
-        false_result = []
-        if self.conditions:
-            true_result, false_result = self._filter_signals(signals)
+        true_result, false_result = self._filter_signals(signals)
 
         self._logger.debug("Emitting {} true signals".format(
             len(true_result)))
@@ -101,5 +98,5 @@ class Filter(Block):
         try:
             return expr(signal)
         except Exception as e:
-            self._logger.error("Filter condition evaluation failed")
+            self._logger.exception("Filter condition evaluation failed")
             return False
