@@ -8,6 +8,7 @@ from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.list import ListProperty
 from nio.metadata.properties.select import SelectProperty
 from nio.metadata.properties.expression import ExpressionProperty
+from nio.metadata.properties.version import VersionProperty
 from nio.metadata.properties.holder import PropertyHolder
 
 
@@ -35,6 +36,7 @@ class Filter(Block):
             filter.
     """
 
+    version = VersionProperty(version='0.1.0', min_version='0.1.0')
     conditions = ListProperty(Condition, title='Filter Conditions')
     operator = SelectProperty(
         BooleanOperator,
@@ -73,13 +75,14 @@ class Filter(Block):
 
         if self.operator is BooleanOperator.ANY:
             self._logger.debug("Filtering on an ANY condition")
-            # let signal in if --           we find one True in the output
+            # let signal in if we find one True in the output
             for sig in signals:
                 tmp = False
                 for expr in self._expressions:
                     val = self._eval_expr(expr, sig)
                     if val:
-                        self._logger.debug("Short circuiting ANY on Truthy condition")
+                        self._logger.debug(
+                            "Short circuiting ANY on Truthy condition")
                         tmp = True
                         break
                 if tmp:
@@ -88,13 +91,14 @@ class Filter(Block):
                     false_result.append(sig)
         else:
             self._logger.debug("Filtering on an ALL condition")
-            # Don't let signal in if --     there is a single False in the output
+            # Don't let signal in if there is a single False in the output
             for sig in signals:
                 tmp = True
                 for expr in self._expressions:
                     val = self._eval_expr(expr, sig)
                     if not val:
-                        self._logger.debug("Short circuiting ALL on Falsy condition")
+                        self._logger.debug(
+                            "Short circuiting ALL on Falsy condition")
                         tmp = False
                         break
                 if tmp:
