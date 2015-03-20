@@ -11,6 +11,7 @@ class DummySignal(Signal):
 
 
 class TestFilter(NIOBlockTestCase):
+
     def test_pass(self):
         signals = [1, 2, 3, 4]
         blk = Filter()
@@ -18,6 +19,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(4, blk)
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_filter_odd(self):
@@ -36,6 +38,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(2, blk)
+        self.assert_num_signals_notified(2, blk, 'false')
         blk.stop()
 
     def test_access_signal_attrs(self):
@@ -49,6 +52,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(1, blk, 'false')
         blk.stop()
 
     def test_bogus_expr(self):
@@ -62,6 +66,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_satisfy_any(self):
@@ -80,6 +85,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(2, blk)
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_satisfy_all(self):
@@ -95,6 +101,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(2, blk, 'false')
         blk.stop()
 
     def test_no_duplicates(self):
@@ -110,6 +117,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_regex(self):
@@ -123,6 +131,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_math(self):
@@ -136,6 +145,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_regex2(self):
@@ -150,6 +160,7 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_bogus_expr2(self):
@@ -164,5 +175,5 @@ class TestFilter(NIOBlockTestCase):
         blk.start()
         blk.process_signals(signals)
         self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(1, blk, 'false')
         blk.stop()
-
