@@ -3,10 +3,12 @@ from itertools import repeat
 from enum import Enum
 import operator
 from nio.common.block.base import Block
+from nio.common.block.attribute import Output
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties.list import ListProperty
 from nio.metadata.properties.select import SelectProperty
 from nio.metadata.properties.expression import ExpressionProperty
+from nio.metadata.properties.version import VersionProperty
 from nio.metadata.properties.holder import PropertyHolder
 
 
@@ -20,6 +22,7 @@ class Condition(PropertyHolder):
 
 
 @Discoverable(DiscoverableType.block)
+@Output('false')
 class Filter(Block):
 
     """ A block for filtering signal objects based on a list of
@@ -33,6 +36,7 @@ class Filter(Block):
             filter.
     """
 
+    version = VersionProperty(version='0.1.0', min_version='0.1.0')
     conditions = ListProperty(Condition, title='Filter Conditions')
     operator = SelectProperty(
         BooleanOperator,
@@ -45,57 +49,54 @@ class Filter(Block):
 
     def process_signals(self, signals):
         self._logger.debug("Ready to process {} signals".format(len(signals)))
-        result = signals
-        if self.conditions:
-            result = self._filter_signals(signals)
+        true_result, false_result = self._filter_signals(signals)
 
-        self._logger.debug("Emitting {} signals".format(len(result)))
-        if len(result):
-            self.notify_signals(result)
+        self._logger.debug("Emitting {} true signals".format(
+            len(true_result)))
+        if len(true_result):
+            self.notify_signals(true_result, 'default')
+
+        self._logger.debug("Emitting {} false signals".format(
+            len(false_result)))
+        if len(false_result):
+            self.notify_signals(false_result, 'false')
 
     def _filter_signals(self, signals):
-        """ Helper function to implement the any/all filtering
-
-        """
+        """ Helper function to implement the any/all filtering """
         # bring them into local variables for speed
         eval_expr = self._eval_expr
-        result = []
-
+        true_result = []
+        false_result = []
         if self.operator is BooleanOperator.ANY:
             self._logger.debug("Filtering on an ANY condition")
-            # let signal in if --           we find one True in the output
+            # let signal in if we find one True in the output
             for sig in signals:
-                tmp = False
                 for expr in self._expressions:
-                    val = self._eval_expr(expr, sig)
-                    if val:
-                        self._logger.debug("Short circuiting ANY on Truthy condition")
-                        tmp = True
+                    if self._eval_expr(expr, sig):
+                        self._logger.debug(
+                            "Short circuiting ANY on Truthy condition")
+                        true_result.append(sig)
                         break
-                if tmp:
-                    result.append(sig)
+                else:
+                    false_result.append(sig)
         else:
             self._logger.debug("Filtering on an ALL condition")
-            # Don't let signal in if --     there is a single False in the output
+            # Don't let signal in if there is a single False in the output
             for sig in signals:
-                tmp = True
                 for expr in self._expressions:
-                    val = self._eval_expr(expr, sig)
-                    if not val:
-                        self._logger.debug("Short circuiting ALL on Falsy condition")
-                        tmp = False
+                    if not self._eval_expr(expr, sig):
+                        self._logger.debug(
+                            "Short circuiting ALL on Falsy condition")
+                        false_result.append(sig)
                         break
-                if tmp:
-                    result.append(sig)
+                else:
+                    true_result.append(sig)
 
-        return result
+        return (true_result, false_result)
 
     def _eval_expr(self, expr, signal):
         try:
             return expr(signal)
         except Exception as e:
-            self._logger.error(
-                "Filter condition evaluation failed: {0}: {1}".format(
-                    type(e).__name__, str(e))
-            )
+            self._logger.exception("Filter condition evaluation failed")
             return False
