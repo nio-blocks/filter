@@ -5,11 +5,9 @@ import operator
 from nio.common.block.base import Block
 from nio.common.block.attribute import Output
 from nio.common.discovery import Discoverable, DiscoverableType
-from nio.metadata.properties.list import ListProperty
-from nio.metadata.properties.select import SelectProperty
-from nio.metadata.properties.expression import ExpressionProperty
+from nio.metadata.properties import ListProperty, SelectProperty, \
+    ExpressionProperty, PropertyHolder
 from nio.metadata.properties.version import VersionProperty
-from nio.metadata.properties.holder import PropertyHolder
 
 
 class BooleanOperator(Enum):
@@ -36,7 +34,7 @@ class Filter(Block):
             filter.
     """
 
-    version = VersionProperty(version='0.1.0', min_version='0.1.0')
+    version = VersionProperty(version='1.0.0', min_version='1.0.0')
     conditions = ListProperty(Condition, title='Filter Conditions')
     operator = SelectProperty(
         BooleanOperator,
