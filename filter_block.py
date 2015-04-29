@@ -1,7 +1,4 @@
-from functools import reduce
-from itertools import repeat
 from enum import Enum
-import operator
 from nio.common.block.base import Block
 from nio.common.block.attribute import Output
 from nio.common.discovery import Discoverable, DiscoverableType
@@ -63,7 +60,6 @@ class Filter(Block):
     def _filter_signals(self, signals):
         """ Helper function to implement the any/all filtering """
         # bring them into local variables for speed
-        eval_expr = self._eval_expr
         true_result = []
         false_result = []
         if self.operator is BooleanOperator.ANY:
@@ -96,6 +92,6 @@ class Filter(Block):
     def _eval_expr(self, expr, signal):
         try:
             return expr(signal)
-        except Exception as e:
+        except Exception:
             self._logger.exception("Filter condition evaluation failed")
             return False
