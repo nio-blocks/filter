@@ -21,6 +21,7 @@ class Condition(PropertyHolder):
 
 @Discoverable(DiscoverableType.block)
 @Output('false')
+@Output('true')
 class Filter(Block):
 
     """ A block for filtering signal objects based on a list of
@@ -34,7 +35,7 @@ class Filter(Block):
             filter.
     """
 
-    version = VersionProperty(version='1.0.0', min_version='1.0.0')
+    version = VersionProperty(version='2.0.0', min_version='2.0.0')
     conditions = ListProperty(Condition, title='Filter Conditions')
     operator = SelectProperty(
         BooleanOperator,
@@ -52,7 +53,7 @@ class Filter(Block):
         self._logger.debug("Emitting {} true signals".format(
             len(true_result)))
         if len(true_result):
-            self.notify_signals(true_result, 'default')
+            self.notify_signals(true_result, 'true')
 
         self._logger.debug("Emitting {} false signals".format(
             len(false_result)))
