@@ -1,6 +1,7 @@
 from enum import Enum
 from nio.common.block.base import Block
 from nio.common.block.attribute import Output
+from nio.common.versioning.dependency import DependsOn
 from nio.common.discovery import Discoverable, DiscoverableType
 from nio.metadata.properties import ListProperty, SelectProperty, \
     ExpressionProperty, PropertyHolder
@@ -16,9 +17,10 @@ class Condition(PropertyHolder):
     expr = ExpressionProperty(title='Condition')
 
 
-@Discoverable(DiscoverableType.block)
 @Output('false')
 @Output('true')
+@DependsOn("nio", "1.5.2")
+@Discoverable(DiscoverableType.block)
 class Filter(Block):
 
     """ A block for filtering signal objects based on a list of
