@@ -18,7 +18,7 @@ class TestFilter(NIOBlockTestCase):
         self.configure_block(blk, {})
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(4, blk)
+        self.assert_num_signals_notified(4, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
@@ -28,7 +28,7 @@ class TestFilter(NIOBlockTestCase):
         self.configure_block(blk, {'operator': 'ANY'})
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(0, blk, 'true')
         self.assert_num_signals_notified(4, blk, 'false')
         blk.stop()
 
@@ -47,7 +47,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(2, blk)
+        self.assert_num_signals_notified(2, blk, 'true')
         self.assert_num_signals_notified(2, blk, 'false')
         blk.stop()
 
@@ -61,7 +61,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(0, blk, 'true')
         self.assert_num_signals_notified(1, blk, 'false')
         blk.stop()
 
@@ -75,7 +75,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
@@ -94,7 +94,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(2, blk)
+        self.assert_num_signals_notified(2, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
@@ -110,7 +110,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(0, blk, 'true')
         self.assert_num_signals_notified(2, blk, 'false')
         blk.stop()
 
@@ -126,7 +126,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
@@ -140,7 +140,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
@@ -154,7 +154,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
@@ -169,7 +169,7 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(1, blk)
+        self.assert_num_signals_notified(1, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
@@ -184,6 +184,6 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(0, blk)
+        self.assert_num_signals_notified(0, blk, 'true')
         self.assert_num_signals_notified(1, blk, 'false')
         blk.stop()
