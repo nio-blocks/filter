@@ -1,6 +1,6 @@
 from ..filter_block import Filter
-from nio.util.support.block_test_case import NIOBlockTestCase
-from nio.common.signal.base import Signal
+from nio.testing.block_test_case import NIOBlockTestCase
+from nio import Signal
 
 
 class DummySignal(Signal):
@@ -75,8 +75,8 @@ class TestFilter(NIOBlockTestCase):
         })
         blk.start()
         blk.process_signals(signals)
-        self.assert_num_signals_notified(1, blk, 'true')
-        self.assert_num_signals_notified(0, blk, 'false')
+        self.assert_num_signals_notified(0, blk, 'true')
+        self.assert_num_signals_notified(1, blk, 'false')
         blk.stop()
 
     def test_satisfy_any(self):
