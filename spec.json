@@ -1,22 +1,23 @@
 {
-  "nio/Filter": {
-    "Output": "Every signal is output to either `true` or `false`.\n### true\nIf **operator** is `ALL` then signals are output here when all **conditions** are `true`.\nIf **operator** is `ANY` then signals are output here when any **conditions** are `true`.\n### false\nIf **operator** is `ALL` then signals are output here when any **conditions** are `false`.\nIf **operator** is `ANY` then signals are output here when all **conditions** are `false`.",
-    "Dependencies": [
-      "None"
-    ],
-    "Commands": {},
-    "Category": "SignalModifier",
-    "Version": "1.0.0",
-    "Properties": {
-      "conditions": {
-        "description": "List of queries."
-      },
-      "operator": {
-        "or": "if",
-        "description": "ALL or ANY. Determines whether all or any of the conditions must be satisfied for a signal to pass the filter. If `ALL`, signals output to `true` if every `condition` is true . If `Any`, signals output to `false` if every `condition` is false ."
-      }
-    },
-    "Description": "A block for filtering signal objects based on a list of plaintext conditions, evaluated as Python code.",
-    "Input": "Any list of signals."
-  }
+    "nio/Filter": {
+        "Commands": {},
+        "Description": "A block for filtering signal objects based on a list of plaintext conditions, evaluated as Python code.",
+        "Output": {
+            "Description": "Every signal is output to either `true` or `false`.\n### true\nIf **operator** is `ALL` then signals are output here when all **conditions** are `true`.\nIf **operator** is `ANY` then signals are output here when any **conditions** are `true`.\n### false\nIf **operator** is `ALL` then signals are output here when any **conditions** are `false`.\nIf **operator** is `ANY` then signals are output here when all **conditions** are `false`."
+        },
+        "Input": {
+            "Description": "Any list of signals."
+        },
+        "Version": "1.0.0",
+        "Category": "SignalModifier",
+        "Properties": {
+            "conditions": {
+                "description": "List of queries."
+            },
+            "operator": {
+                "description": "ALL or ANY. Determines whether all or any of the conditions must be satisfied for a signal to pass the filter. If `ALL`, signals output to `true` if every `condition` is true . If `Any`, signals output to `false` if every `condition` is false .",
+                "or": "if"
+            }
+        }
+    }
 }
