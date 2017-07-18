@@ -1,6 +1,9 @@
-from ..filter_block import Filter
+from unittest.mock import patch
+
 from nio.testing.block_test_case import NIOBlockTestCase
 from nio import Signal
+
+from ..filter_block import Filter
 
 
 class DummySignal(Signal):
@@ -74,9 +77,34 @@ class TestFilter(NIOBlockTestCase):
             ]
         })
         blk.start()
-        blk.process_signals(signals)
+        with patch.object(blk, "logger") as patched_logger:
+            # 'vals' doesn't exist on the signal, so process_signals will error
+            with self.assertRaises(AttributeError):
+                blk.process_signals(signals)
+            self.assertEqual(patched_logger.exception.call_count, 1)
+        blk.stop()
+        # should not output a signal at all and raise an exception
         self.assert_num_signals_notified(0, blk, 'true')
-        self.assert_num_signals_notified(1, blk, 'false')
+        self.assert_num_signals_notified(0, blk, 'false')
+
+    def test_bogus_expr2(self):
+        signals = [DummySignal('anything')]
+        blk = Filter()
+        self.configure_block(blk, {
+            'conditions': [
+                {'expr': ('{{datetime.timeskelta(2) >'
+                          'datetime.timeskelta(1)}}')}
+            ]
+        })
+        blk.start()
+        with patch.object(blk, "logger") as patched_logger:
+            # 'vals' doesn't exist on the signal, so process_signals will error
+            with self.assertRaises(AttributeError):
+                blk.process_signals(signals)
+            self.assertEqual(patched_logger.exception.call_count, 1)
+        # should not output a signal at all and raise an exception
+        self.assert_num_signals_notified(0, blk, 'true')
+        self.assert_num_signals_notified(0, blk, 'false')
         blk.stop()
 
     def test_satisfy_any(self):
@@ -171,19 +199,4 @@ class TestFilter(NIOBlockTestCase):
         blk.process_signals(signals)
         self.assert_num_signals_notified(1, blk, 'true')
         self.assert_num_signals_notified(0, blk, 'false')
-        blk.stop()
-
-    def test_bogus_expr2(self):
-        signals = [DummySignal('anything')]
-        blk = Filter()
-        self.configure_block(blk, {
-            'conditions': [
-                {'expr': ('{{datetime.timeskelta(2) >'
-                          'datetime.timeskelta(1)}}')}
-            ]
-        })
-        blk.start()
-        blk.process_signals(signals)
-        self.assert_num_signals_notified(0, blk, 'true')
-        self.assert_num_signals_notified(1, blk, 'false')
         blk.stop()
