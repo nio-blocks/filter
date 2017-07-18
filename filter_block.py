@@ -92,5 +92,5 @@ class Filter(Block):
         try:
             return expr(signal)
         except Exception:
-            self.logger.exception("Filter condition evaluation failed")
-            return False
+            self.logger.exception("Filter condition evaluation failed: ")
+            raise
