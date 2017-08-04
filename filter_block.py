@@ -1,7 +1,6 @@
 from enum import Enum
 from nio import Block
 from nio.block import output
-from nio.util.discovery import discoverable
 from nio.properties import ListProperty, SelectProperty, \
     Property, PropertyHolder, VersionProperty
 
@@ -15,7 +14,6 @@ class Condition(PropertyHolder):
     expr = Property(title='Condition')
 
 
-@discoverable
 @output('false', label='False')
 @output('true', label='True')
 class Filter(Block):
@@ -33,10 +31,12 @@ class Filter(Block):
 
     version = VersionProperty(version='2.0.0', min_version='2.0.0')
     conditions = ListProperty(Condition, title='Filter Conditions', default=[])
-    operator = SelectProperty(
-        BooleanOperator,
-        default=BooleanOperator.ALL,
-        title='Condition Operator')
+    operator = SelectProperty(BooleanOperator, default=BooleanOperator.ALL,
+                              title='Condition Operator')
+
+    def __init__(self):
+        super().__init__()
+        self._expressions = None
 
     def configure(self, context):
         super().configure(context)
