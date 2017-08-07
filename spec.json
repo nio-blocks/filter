@@ -1,10 +1,21 @@
 {
   "nio/Filter": {
-    "version": "0.0.1",
+    "version": "2.0.0",
     "description": "",
+    "properties": {
+      "conditions": {
+        "title": "Filter Conditions",
+        "description": "",
+        "default": []
+      },
+      "operator": {
+        "title": "Condition Operator",
+        "description": "",
+        "default": 1
+      }
+    },
     "inputs": {},
     "outputs": {},
-    "properties": {},
     "commands": {}
   }
 }
