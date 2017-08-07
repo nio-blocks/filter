@@ -1,21 +1,34 @@
 {
   "nio/Filter": {
     "version": "2.0.0",
-    "description": "",
+    "description": "A block for filtering signal objects based on a list of plaintext conditions, evaluated as Python code.",
     "properties": {
       "conditions": {
         "title": "Filter Conditions",
-        "description": "",
+        "description": "A list of strings to be evaluated as filter conditions.",
+        "type": "ListProperty",
         "default": []
       },
       "operator": {
         "title": "Condition Operator",
-        "description": "",
+        "description": "Determines whether all or any of the conditions must be satisfied for a signal to pass the filter.",
+        "type": "SelectProperty",
         "default": 1
       }
     },
-    "inputs": {},
-    "outputs": {},
+    "inputs": {
+      "default": {
+        "description": "Signal to be filtered"
+      }
+    },
+    "outputs": {
+      "false": {
+        "description": "Signals that evaluate to False emit from this output"
+      },
+      "true": {
+        "description": "Signals that evaluate to True emit from this output"
+      }
+    },
     "commands": {}
   }
 }
