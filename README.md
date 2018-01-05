@@ -1,11 +1,11 @@
 Filter
 ======
-The Filter block will compare an incoming signal to a condition, evaluated as python code. If the condition is met, the signal will emit from the *True* terminal. If the condition is not met, the signal will emit from the *False* terminal.
+The Filter block will evaluate an incoming signal against a conditional expression. If the condition is met, the signal will emit from the **true** terminal. If the condition is not met, the signal will emit from the **false** terminal.
 
 Properties
 ----------
 - **conditions**: A list of strings to be evaluated as filter conditions.
-- **operator**: Determines whether *all* or *any* of the conditions must be satisfied for the comparison.
+- **operator**: Determines whether *all* or *any* of the conditions must be satisfied.
 
 Inputs
 ------
@@ -13,8 +13,8 @@ Inputs
 
 Outputs
 -------
-- **false**: Signals that evaluate to *False* will emit from this output.
-- **true**: Signals that evaluate to *True* will emit from this output.
+- **false**: Signals that evaluate to `False` will emit from this output.
+- **true**: Signals that evaluate to `True` will emit from this output.
 
 Commands
 --------

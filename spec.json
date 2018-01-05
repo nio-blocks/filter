@@ -1,7 +1,7 @@
 {
   "nio/Filter": {
     "version": "2.0.0",
-    "description": "The Filter block will compare an incoming signal to a condition, evaluated as python code. If the condition is met, the signal will emit from the *True* terminal. If the condition is not met, the signal will emit from the *False* terminal.",
+    "description": "The Filter block will evaluate an incoming signal against a conditional expression. If the condition is met, the signal will emit from the **true** terminal. If the condition is not met, the signal will emit from the **false** terminal.",
     "categories": [
       "Signal Flow"
     ],
@@ -15,7 +15,7 @@
       "operator": {
         "title": "Condition Operator",
         "type": "SelectProperty",
-        "description": "Determines whether *all* or *any* of the conditions must be satisfied for the comparison.",
+        "description": "Determines whether *all* or *any* of the conditions must be satisfied.",
         "default": 1
       }
     },
@@ -26,10 +26,10 @@
     },
     "outputs": {
       "false": {
-        "description": "Signals that evaluate to *False* will emit from this output."
+        "description": "Signals that evaluate to `False` will emit from this output."
       },
       "true": {
-        "description": "Signals that evaluate to *True* will emit from this output."
+        "description": "Signals that evaluate to `True` will emit from this output."
       }
     },
     "commands": {}
