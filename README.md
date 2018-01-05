@@ -4,7 +4,7 @@ The Filter block will evaluate an incoming signal against a conditional expressi
 
 Properties
 ----------
-- **conditions**: A list of strings to be evaluated as filter conditions.
+- **conditions**: A list of expressions to be evaluated as filter conditions.
 - **operator**: Determines whether *all* or *any* of the conditions must be satisfied.
 
 Inputs
