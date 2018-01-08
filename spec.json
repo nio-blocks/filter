@@ -1,6 +1,6 @@
 {
   "nio/Filter": {
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "The Filter block will evaluate an incoming signal against a conditional expression. If the condition is met, the signal will emit from the **true** terminal. If the condition is not met, the signal will emit from the **false** terminal.",
     "categories": [
       "Signal Flow"

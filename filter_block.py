@@ -30,7 +30,7 @@ class Filter(Block):
             filter.
     """
 
-    version = VersionProperty(version='2.0.0', min_version='2.0.0')
+    version = VersionProperty("2.0.1")
     conditions = ListProperty(Condition, title='Filter Conditions', default=[])
     operator = SelectProperty(BooleanOperator, default=BooleanOperator.ALL,
                               title='Condition Operator')
