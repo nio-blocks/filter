@@ -5,7 +5,7 @@
       "Signal Flow"
     ],
     "tags": "logic gate and or conditional condition true false",
-    "from_readme": "docs/filter_block.md",
+    "from_readme": "docs/filter.md",
     "from_python": "filter_block.Filter"
   }
 }
