@@ -3,7 +3,7 @@ filter
 
 Blocks in this Collection
 ---
-[Filter](docs/filter_block.md)
+[Filter](docs/filter.md)
 
 Dependencies
 ---
